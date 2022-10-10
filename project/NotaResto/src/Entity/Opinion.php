@@ -25,7 +25,7 @@ class Opinion
     private Collection $restaurant;
 
     #[ORM\ManyToOne(inversedBy: 'opinion')]
-    private ?Response $response = null;
+    private ?Answer $response = null;
 
     #[ORM\OneToMany(mappedBy: 'opinion', targetEntity: User::class)]
     private Collection $user;
@@ -95,12 +95,12 @@ class Opinion
         return $this;
     }
 
-    public function getResponse(): ?Response
+    public function getAnswer(): ?Answer
     {
         return $this->response;
     }
 
-    public function setResponse(?Response $response): self
+    public function setAnswer(?Answer $response): self
     {
         $this->response = $response;
 
