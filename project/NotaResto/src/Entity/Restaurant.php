@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RestaurantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,16 +26,21 @@ class Restaurant
     private ?string $address = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $phone = null;
+    private ?string $phone = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private array $images = [];
 
-    #[ORM\ManyToOne(inversedBy: 'restaurant')]
-    private ?Opinion $opinion = null;
+    #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Opinion::class)]
+    private Collection $opinions;
 
-    #[ORM\ManyToOne(inversedBy: 'restaurant')]
+    #[ORM\ManyToOne(inversedBy: 'restaurants')]
     private ?User $user = null;
+
+    public function __construct()
+    {
+        $this->opinions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,12 +83,12 @@ class Restaurant
         return $this;
     }
 
-    public function getPhone(): ?int
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    public function setPhone(?int $phone): self
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
 
@@ -100,14 +107,32 @@ class Restaurant
         return $this;
     }
 
-    public function getOpinion(): ?Opinion
+    /**
+     * @return Collection<int, Opinion>
+     */
+    public function getOpinions(): Collection
     {
-        return $this->opinion;
+        return $this->opinions;
     }
 
-    public function setOpinion(?Opinion $opinion): self
+    public function addOpinion(Opinion $opinion): self
     {
-        $this->opinion = $opinion;
+        if (!$this->opinions->contains($opinion)) {
+            $this->opinions->add($opinion);
+            $opinion->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOpinion(Opinion $opinion): self
+    {
+        if ($this->opinions->removeElement($opinion)) {
+            // set the owning side to null (unless already changed)
+            if ($opinion->getRestaurant() === $this) {
+                $opinion->setRestaurant(null);
+            }
+        }
 
         return $this;
     }

@@ -1,0 +1,14 @@
+App\Entity\Opinion:
+  opinion_{1..100}:
+    note: <numberBetween(0, 5)>
+    commentary: <text(255)>
+    restaurant: '@restaurant*'
+    user: '@user*'
+    answer : null
+
+  opinion_{101..115}:
+    note: <numberBetween(0, 5)>
+    commentary: <text(255)>
+    restaurant: '@restaurant*'
+    user: '@user*'
+    answer (unique): '@answer*'

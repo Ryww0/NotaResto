@@ -1,0 +1,7 @@
+App\Entity\Restaurant:
+  restaurant_{1..100}:
+    name: <word()>
+    postcode: <numberBetween(1000,99999)>
+    address: <address()>
+    phone: <phoneNumber()>
+    user: '@user_21'

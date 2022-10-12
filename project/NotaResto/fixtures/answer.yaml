@@ -1,0 +1,3 @@
+App\Entity\Answer:
+  answer_{1..15}:
+    response: <text(255)>

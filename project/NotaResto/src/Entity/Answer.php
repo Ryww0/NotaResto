@@ -18,14 +18,6 @@ class Answer
     #[ORM\Column(length: 255)]
     private ?string $response = null;
 
-    #[ORM\OneToMany(mappedBy: 'response', targetEntity: Opinion::class)]
-    private Collection $opinion;
-
-    public function __construct()
-    {
-        $this->opinion = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -39,36 +31,6 @@ class Answer
     public function setResponse(string $response): self
     {
         $this->response = $response;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Opinion>
-     */
-    public function getOpinion(): Collection
-    {
-        return $this->opinion;
-    }
-
-    public function addOpinion(Opinion $opinion): self
-    {
-        if (!$this->opinion->contains($opinion)) {
-            $this->opinion->add($opinion);
-            $opinion->setResponse($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOpinion(Opinion $opinion): self
-    {
-        if ($this->opinion->removeElement($opinion)) {
-            // set the owning side to null (unless already changed)
-            if ($opinion->getResponse() === $this) {
-                $opinion->setResponse(null);
-            }
-        }
 
         return $this;
     }

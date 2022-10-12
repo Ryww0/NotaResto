@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Infos Resto{% endblock %}
+
+{% block body %}
+    <div class="card mt-5 col-12">
+        <div class="card-body">
+            <h5 class="card-title">{{ restaurant.restaurant.name }}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">adresse: {{ restaurant.restaurant.address }}</li>
+            <li class="list-group-item">Code postal: {{ restaurant.restaurant.postcode }}</li>
+            <li class="list-group-item">Numéro de téléphone: {{ restaurant.restaurant.phone }}</li>
+            {% if restaurant.restaurant.opinions is empty %}
+                <li class="list-group-item">pas d'avis</li>
+            {% else %}
+                <li class="list-group-item">note: {{ restaurant.avg|round(1, 'floor') }}/5</li>
+            {% endif %}
+        </ul>
+        <div class="card-body">
+            <a href="{{ path('app_restaurant_id_create_opinion', {'restaurant': restaurant.restaurant.id}) }}"
+               class="card-link">Ajouter un avis</a>
+        </div>
+    </div>
+{% endblock %}
