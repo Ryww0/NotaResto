@@ -8,8 +8,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ path('app_liste_des_restaurant') }}">Liste des restaurants</a>
+                    <a class="nav-link" aria-current="page" href="{{ path('app_liste_des_restaurant') }}">Liste des
+                        restaurants</a>
                 </li>
+                {% if app.user %}
+                    {% for role in app.user.roles %}
+                        {% if role == 'ROLE_RESTAURATEUR' %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page"
+                                   href="{{ path('app_create_restaurant') }}">Ajouter un restaurant</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
                 {% if not app.user %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_login') }}">connexion</a>

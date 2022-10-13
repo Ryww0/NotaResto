@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Opinion;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -15,10 +16,10 @@ class OpinionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('note', IntegerType::class, [
+            ->add('note', HiddenType::class, [
                 'attr' => [
-                    'min'=>'0',
-                    'max' => '5'
+                    'id' => 'note',
+                    'value' => 0
                 ]
             ])
             ->add('commentary', TextareaType::class)

@@ -28,12 +28,11 @@
             {% form_theme form 'bootstrap_5_layout.html.twig' %}
             {{ form_start(form, { attr: {'id': 'form_video' } }) }}
             <div class="mt-2">
-                {{ form_label(form.note) }}
+                <label class="mt-2" for="note">Note</label>
                 <div class="star">
                     <i class="bi bi-star" data-value="1"></i><i class="bi bi-star" data-value="2"></i><i class="bi bi-star" data-value="3"></i><i class="bi bi-star" data-value="4"></i><i class="bi bi-star" data-value="5"></i>
                 </div>
-                {{ form_widget(form.note, {attr:{'type': 'hidden'} }) }}
-            </div>
+{#                <input type="text" name="note" id="note" value="0">#}
             <div class="mt-2">
                 {{ form_label(form.commentary) }}
                 {{ form_widget(form.commentary) }}

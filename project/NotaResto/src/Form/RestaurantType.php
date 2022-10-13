@@ -3,8 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Restaurant;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,9 +18,7 @@ class RestaurantType extends AbstractType
             ->add('postcode')
             ->add('address')
             ->add('phone')
-            ->add('images')
-            ->add('opinion')
-            ->add('user')
+            ->add('Creer', SubmitType::class)
         ;
     }
 

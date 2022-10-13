@@ -8,6 +8,7 @@ use App\Entity\Opinion;
 use App\Entity\Restaurant;
 use App\Form\OpinionType;
 use App\Form\RechercheType;
+use App\Form\RestaurantType;
 use App\Repository\OpinionRepository;
 use App\Repository\RestaurantRepository;
 use Doctrine\DBAL\Types\IntegerType;
@@ -22,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'app_home')]
+    #[Route('/', name: 'app_home')]
     public function findRestaurantByBestOpinion(RestaurantRepository $restaurantRepository, Request $request): Response
     {
 
@@ -95,6 +96,28 @@ class HomeController extends AbstractController
         return $this->render('view_all_restaurant.html.twig', [
             'formR' => $formR->createView(),
             'pagination' => $pagination
+        ]);
+    }
+
+    #[Route('restaurateur/add/restaurant', name: 'app_create_restaurant')]
+    public function createNewRestaurant(Request $request, ManagerRegistry $doctrine)
+    {
+        $resto = new Restaurant();
+        $resto->setUser($this->getUser());
+
+        $formResto = $this->createForm(RestaurantType::class, $resto);
+
+        $formResto->handleRequest($request);
+        if ($formResto->isSubmitted() && $formResto->isValid()) {
+            $resto = $formResto->getData();
+
+            $em = $doctrine->getManager();
+            $em->persist($resto);
+            $em->flush();
+        }
+
+        return $this->render('create_resto.html.twig', [
+           'form' => $formResto->createView(),
         ]);
     }
 }
