@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Restaurant;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,7 +13,7 @@ class RestaurantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
+            ->add('name', TextType::class)
             ->add('postcode')
             ->add('address')
             ->add('phone')

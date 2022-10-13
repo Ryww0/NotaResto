@@ -6,6 +6,7 @@ use App\Entity\Restaurant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -41,14 +42,24 @@ class RestaurantRepository extends ServiceEntityRepository
         }
     }
 
-    public function findAllRestaurantByBestOpinionOrderByOpinionDesc(): array
+    public function findAllRestaurantOrderByOpinionDesc(): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder("r");
         $queryBuilder->select("r as restaurant , AVG(opinion.note) as avg");
         $queryBuilder->leftJoin('App\Entity\Opinion', 'opinion', Join::WITH, 'r.id = opinion.restaurant');
         $queryBuilder->orderBy('avg', 'DESC');
         $queryBuilder->groupBy('r');
-        return $queryBuilder->getQuery()->getResult(); // on renvoie le résultat
+        return $queryBuilder;
+    }
+
+    public function findAllRestaurantByBestOpinionOrderByOpinionDesc(): mixed
+    {
+        $queryBuilder = $this->createQueryBuilder("r");
+        $queryBuilder->select("r as restaurant , AVG(opinion.note) as avg");
+        $queryBuilder->leftJoin('App\Entity\Opinion', 'opinion', Join::WITH, 'r.id = opinion.restaurant');
+        $queryBuilder->orderBy('avg', 'DESC');
+        $queryBuilder->groupBy('r');
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -66,12 +77,16 @@ class RestaurantRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getOneOrNullResult(); // on renvoie le résultat
     }
 
-    public function findByPostCode( $where ) : array
+    public function findRestaurantWherePostcodeLikeSearch($where): QueryBuilder
     {
-        $queryBuilder = $this->createQueryBuilder("restaurant");
-        $queryBuilder->where(' restaurant.postcode like :w');
-        $queryBuilder->setParameter(':w', $where.'%');
-        return $queryBuilder->getQuery()->getResult(); // on renvoie le résultat
+        $queryBuilder = $this->createQueryBuilder("p");
+        $queryBuilder->select("p as restaurant , AVG(opinion.note) as avg");
+        $queryBuilder->leftJoin('App\Entity\Opinion', 'opinion', Join::WITH, 'p.id = opinion.restaurant');
+        $queryBuilder->where(' p.postcode like :w');
+        $queryBuilder->setParameter(':w', $where . '%');
+        $queryBuilder->orderBy('avg', 'DESC');
+        $queryBuilder->groupBy('p');
+        return $queryBuilder;
     }
 
 //    /**

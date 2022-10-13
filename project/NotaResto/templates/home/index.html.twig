@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil top 8 restaurant{% endblock %}
 
 {% block body %}
     <div>
-        <h1 class="text-center">Top restaurants</h1>
+        <h1 class="text-center mb-5 mt-3">Top restaurants</h1>
     </div>
     <div class="row justify-content-around">
         {% for restaurant in restaurants | slice(0,8) %}

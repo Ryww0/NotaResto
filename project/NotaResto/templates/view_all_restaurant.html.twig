@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}liste des restaurant{% endblock %}
+
+{% block body %}
+    <div>
+        <h1 class="text-center mt-5 mb-3">Tous les restaurants</h1>
+    </div>
+    <div class=" justify-content-around">
+        {% form_theme formR 'bootstrap_5_layout.html.twig' %}
+        {{ form_start(formR, {'attr': {'class': 'row justify-content-around'}}) }}
+        <div class="col-8">
+            {{ form_widget( formR.search ) }}
+        </div>
+        <div class="col-3">
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg></button>
+        </div>
+        {{ form_end(formR) }}
+
+    </div>
+    <div class="row justify-content-around">
+        {% for restaurant in pagination %}
+            {% include 'cards/card_best_note.html.twig' %}
+        {% endfor %}
+    </div>
+    {{ knp_pagination_render(pagination) }}
+{% endblock %}
