@@ -17,6 +17,7 @@ class OpinionType extends AbstractType
         $builder
             ->add('note', IntegerType::class, [
                 'attr' => [
+                    'min'=>'0',
                     'max' => '5'
                 ]
             ])

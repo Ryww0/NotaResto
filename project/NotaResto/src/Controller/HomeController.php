@@ -15,6 +15,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +27,6 @@ class HomeController extends AbstractController
     {
 
         $restaurants = $restaurantRepository->findAllRestaurantByBestOpinionOrderByOpinionDesc();
-        dump($restaurants);
 
         return $this->render('home/index.html.twig', [
             'restaurants' => $restaurants
@@ -37,18 +37,10 @@ class HomeController extends AbstractController
      * @throws NonUniqueResultException
      */
     #[Route('/restaurant/{restaurant}', name: 'app_restaurant_id')]
-    public function findRestaurantById(RestaurantRepository $restaurantRepository, Restaurant $restaurant): Response
+    public function findRestaurantById(ManagerRegistry $doctrine, Request $request, RestaurantRepository $restaurantRepository, Restaurant $restaurant)
     {
         $r = $restaurantRepository->findRestaurant($restaurant);
 
-        return $this->render('restaurant.html.twig', [
-            'restaurant' => $r,
-        ]);
-    }
-
-    #[Route('/restaurant/{restaurant}/create/opinion', name: 'app_restaurant_id_create_opinion')]
-    public function createOpinion(ManagerRegistry $doctrine, Request $request, Restaurant $restaurant): Response
-    {
         $opinion = new Opinion();
         $opinion
             ->setUser($this->getUser())
@@ -58,21 +50,25 @@ class HomeController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (IntegerType::class <= 5) {
+            $opinion = $form->getData();
+            dump($opinion);
+            if ($opinion->getNote() <= 5 && $opinion->getNote() >= 0) {
                 $em = $doctrine->getManager();
                 $em->persist($opinion);
                 $em->flush();
-                return $this->redirectToRoute('app_restaurant_id', ['restaurant' => $restaurant->getId()]);
+//                return $this->redirectToRoute('app_restaurant_id', ['restaurant' => $restaurant->getId()])
+
+                return new JsonResponse(['html' => $this->render('cards/card_opinion.html.twig', ['opinion' => $opinion])->getContent()]);
             }
         }
-        return $this->render('create_opinion.html.twig', [
+
+        return $this->render('restaurant.html.twig', [
+            'restaurant' => $r,
             'form' => $form->createView(),
         ]);
     }
 
-
-
-     #[Route('/liste', name: 'app_liste_des_restaurant')]
+    #[Route('/liste', name: 'app_liste_des_restaurant')]
     public function showAllRestaurant(RestaurantRepository $restaurantRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
@@ -94,7 +90,6 @@ class HomeController extends AbstractController
                 8/*limit per page*/
             );
         }
-
 
 
         return $this->render('view_all_restaurant.html.twig', [
