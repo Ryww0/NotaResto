@@ -1,5 +1,11 @@
 <div class="card mt-5 col-3 border-primary" style="width: 18rem;">
-    <img src="..." class="card-img-top" alt="...">
+    <div class="card-header card-image-container">
+        {% if restaurant.restaurant.image != null %}
+            <img src="{{ asset('uploads/images/' ~ restaurant.restaurant.image) }}" class="card-img-top" alt="...">
+        {% else %}
+            <img src="{{ asset('uploads/images/default.png')}}" class="card-img-top" alt="...">
+        {% endif %}
+    </div>
     <div class="card-body">
         <h5 class="card-title">{{ restaurant.restaurant.name }}</h5>
     </div>

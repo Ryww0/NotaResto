@@ -55,6 +55,7 @@ class RestaurantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $restaurantRepository->save($restaurant, true);
 
             return $this->redirectToRoute('app_restaurant_index', [], Response::HTTP_SEE_OTHER);

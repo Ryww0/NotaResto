@@ -5,9 +5,11 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Twig\Profiler\Profile;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -55,6 +57,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $this->save($user, true);
     }
+
+    public function DisplayProfileById(Profile $profile): ?array
+    {
+        $queryBuilder = $this->createQueryBuilder("p");
+        $queryBuilder->select("p as profile , AVG(opinion.note) as avg");
+        $queryBuilder->leftJoin('App\Entity\Opinion', 'opinion', Join::WITH, 'p.id = opinion.restaurant');
+        $queryBuilder->where("p.id = :profile");
+        $queryBuilder->setParameter(":profile", $profile-getId());
+        $queryBuilder->leftJoin('App\Entity\Opinion', 'opinion', Join::WITH, 'r.id = opinion.restaurant');
+        $queryBuilder->orderBy('avg', 'DESC');
+        $queryBuilder->groupBy('r');
+        return $queryBuilder->getQuery()->getOneOrNullResult(); // on renvoie le résultat
+    }
+
+
+
 
 //    /**
 //     * @return User[] Returns an array of User objects

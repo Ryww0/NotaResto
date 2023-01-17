@@ -8,14 +8,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ path('app_liste_des_restaurant') }}">Liste des
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_liste_des_restaurant' %} active{% endif %}" href="{{ path('app_liste_des_restaurant') }}">Liste des
                         restaurants</a>
                 </li>
                 {% if app.user %}
                     {% for role in app.user.roles %}
                         {% if role == 'ROLE_RESTAURATEUR' %}
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page"
+                                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_create_restaurant' %} active{% endif %}"
                                    href="{{ path('app_create_restaurant') }}">Ajouter un restaurant</a>
                             </li>
                         {% endif %}
@@ -23,17 +23,21 @@
                 {% endif %}
                 {% if not app.user %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_login') }}">connexion</a>
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_login' %} active{% endif %}" href="{{ path('app_login') }}">connexion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_register') }}" tabindex="-1" aria-disabled="true">Inscription</a>
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_register' %} active{% endif %}" href="{{ path('app_register') }}" tabindex="-1" aria-disabled="true">Inscription</a>
                     </li>
                 {% endif %}
                 {% if app.user %}
                     <li class="nav-item">
+                        <a class="nav-link " href="{{ path('app_profile_show') }}" tabindex="-1" aria-disabled="true">Profil</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_logout') }}" tabindex="-1"
                            aria-disabled="true">Déconnexion</a>
                     </li>
+
                 {% endif %}
 
             </ul>

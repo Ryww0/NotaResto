@@ -26,6 +26,7 @@ formVideo.addEventListener('submit', function (e) {
         .then(response => response.json())
         .then(json => {
             list_opinion.innerHTML = json.html + list_opinion.innerHTML;
+            loop();
         });
 
 });
@@ -85,3 +86,21 @@ window.onload = () => {
         }
     }
 }
+
+
+function deleteMessage() {
+    let errorMessage = document.querySelector('#error');
+    if(errorMessage != null){
+        errorMessage.remove();
+    }
+}
+
+function loop() {
+    setTimeout(() => {
+        deleteMessage();
+    }, 7000);
+}
+
+
+
+

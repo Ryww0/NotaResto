@@ -1,3 +1,13 @@
 @import "~bootswatch/dist/LUX/variables";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootswatch/dist/LUX/bootswatch";
+
+.card-image-container {
+  overflow: hidden;
+  height: 150px;
+  padding: 0 !important;
+
+  img {
+    width: 100%;
+  }
+}

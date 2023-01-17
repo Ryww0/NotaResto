@@ -262,4 +262,10 @@
     <div class="card-body">
         <p>{{ opinion.commentary }}</p>
     </div>
+    <div class="card-footer">
+        <p>{{ opinion.user.firstname }}</p>
+        {% if app.user.id == opinion.user.id %}
+            <a class="btn btn-danger" href="{{ path('app_del_opinion', {opinion: opinion.id}) }}">Supprimer l'avis</a>
+        {% endif %}
+    </div>
 </div>

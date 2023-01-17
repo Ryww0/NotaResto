@@ -53,8 +53,8 @@ class OpinionController extends AbstractController
     {
         $form = $this->createForm(OpinionType::class, $opinion);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+
             $opinionRepository->save($opinion, true);
 
             return $this->redirectToRoute('app_opinion_index', [], Response::HTTP_SEE_OTHER);
